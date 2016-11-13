@@ -2,6 +2,7 @@ import sys, pygame, math, random
 import entities, systems, components, actions
 from world import World
 import worldgen
+from point import Point
 
 if __name__ == "__main__":
     # Constants go here
@@ -15,13 +16,15 @@ if __name__ == "__main__":
     timer = pygame.time.Clock()
 
     # Create world with starting entities
-    player = entities.player(0,0,0)
-    world = World([player,
-        entities.wall(3,0,0),
-        entities.wall(4,0,0),
-        entities.wall(4,1,0),
-        entities.moveright(-5,1,0),
-    ], player, screen)
+    player = entities.player()
+    world = World(player, screen)
+
+    world.add_entity(player,Point(0,0,0))
+    world.add_entity(entities.wall(),Point(3,0,0))
+    world.add_entity(entities.wall(),Point(4,0,0))
+    world.add_entity(entities.wall(),Point(4,1,0))
+    world.add_entity(entities.moveright(),Point(-10,1,0))
+
     worldgen.generate(world)
 
     drawer = systems.DrawingSystem(screen, player)
@@ -37,7 +40,7 @@ if __name__ == "__main__":
                     sys.exit()
 
                 # Player movement
-                pt = world.player.get(components.Transform)
+                pt = world.find_pos(player)
                 if event.key == pygame.K_KP1: # South west
                     world.player.give_action(actions.MoveAction(pt.x-1,pt.y+1))
                 if event.key == pygame.K_KP2: # South
@@ -63,3 +66,4 @@ if __name__ == "__main__":
 
         # Get delta time
         dt = timer.tick() * 0.001
+        # pygame.time.wait(10)

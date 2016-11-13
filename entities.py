@@ -32,24 +32,21 @@ class Entity:
     def clear_actions(self):
         self.actions = []
 
-def player(x,y,z):
+def player():
     return Entity("John McJohn", [
-        components.Transform(x,y,z),
         components.Drawable('@',(255,255,255)),
         components.Character(),
         components.Solid(0.25)
     ])
 
-def wall(x,y,z):
+def wall():
     return Entity("a wall", [
-        components.Transform(x,y,z),
         components.Drawable('#', (128,128,128), bgcolor = (96,96,96)),
         components.Solid(1)
     ])
 
-def moveright(x,y,z):
+def moveright():
     return Entity("i wanna moveright", [
-        components.Transform(x,y,z),
         components.Drawable('>',(0,255,0)),
         components.MoveRight(),
         components.Solid(0.25)

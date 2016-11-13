@@ -39,9 +39,15 @@ def player():
         components.Solid(0.25)
     ])
 
-def wall():
-    return Entity("a wall", [
+def rock():
+    return Entity("rock", [
         components.Drawable('#', (128,128,128), bgcolor = (96,96,96)),
+        components.Solid(1)
+    ])
+
+def dirt():
+    return Entity("dirt", [
+        components.Drawable('~', (165,42,42), bgcolor = (64,16,16)),
         components.Solid(1)
     ])
 

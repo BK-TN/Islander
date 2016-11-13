@@ -3,6 +3,7 @@ import entities, systems, components, actions
 from world import World
 import worldgen
 from point import Point
+import time
 
 if __name__ == "__main__":
     # Constants go here
@@ -20,9 +21,9 @@ if __name__ == "__main__":
     world = World(player, screen)
 
     world.add_entity(player,Point(0,0,0))
-    world.add_entity(entities.wall(),Point(3,0,0))
-    world.add_entity(entities.wall(),Point(4,0,0))
-    world.add_entity(entities.wall(),Point(4,1,0))
+    world.add_entity(entities.rock(),Point(3,0,0))
+    world.add_entity(entities.rock(),Point(4,0,0))
+    world.add_entity(entities.rock(),Point(4,1,0))
     world.add_entity(entities.moveright(),Point(-10,1,0))
 
     worldgen.generate(world)
@@ -38,6 +39,8 @@ if __name__ == "__main__":
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
+                    
+                now = time.time()
 
                 # Player movement
                 pt = world.find_pos(player)
@@ -61,9 +64,15 @@ if __name__ == "__main__":
                     world.wait(2)
 
                 # Step until player is ready
+
                 world.step_until_ready()
+                step = time.time()
                 drawer.process(world)
+                draw = time.time()
+
+                print("Step(s) took " + str(round(step - now,3)*1000) + "ms")
+                print("Draw took " + str(round(draw - step,3)*1000) + "ms")
 
         # Get delta time
         dt = timer.tick() * 0.001
-        # pygame.time.wait(10)
+        #pygame.time.wait(10)

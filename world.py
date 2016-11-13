@@ -21,6 +21,8 @@ class World:
         self.grid[pos].append(entity)
         self.entities.append(entity)
         self.positions[entity] = pos
+        for sys in self.systems:
+            sys.check_entity(entity)
 
     def remove_entity(self, entity):
         pass

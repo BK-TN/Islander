@@ -13,6 +13,9 @@ class DrawingSystem:
         self.tileset.set_colorkey((0,0,0))
         self.tilew = 12
         self.tileh = 16
+        self.entities = []
+    def check_entity(self, entity):
+        pass
     def process(self, world):
         if self.camera_target != None:
             pos = world.find_pos(self.camera_target)
@@ -68,7 +71,10 @@ class DrawingSystem:
 
 class MovementSystem:
     def __init__(self):
-        pass
+        self.entities = []
+    def check_entity(self, entity):
+        if entity.has(components.Character) or entity.has(components.MoveRight):
+            self.entities.append(entity)
     def process(self, world):
         def try_move(world, entity, pos):
             can_move = True
@@ -82,7 +88,7 @@ class MovementSystem:
             if can_move:
                 world.move_entity(entity, pos)
 
-        for e in world.entities:
+        for e in self.entities:
             character = e.get(components.Character)
             moveright = e.get(components.MoveRight)
             if character != None:

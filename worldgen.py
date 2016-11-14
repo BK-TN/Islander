@@ -4,12 +4,15 @@ from point import Point
 def generate(world):
     i = 0
     size = 50
-    for z in range(1,10):
+    for z in range(0,10):
         for x in range(-size,size):
             for y in range(-size,size):
-                if z == 1:
-                    world.add_entity(entities.dirt(),Point(x,y,z))
+                if z == 0:
+                    entity_to_add = entities.grass()
+                elif z == 1:
+                    entity_to_add = entities.dirt()
                 else:
-                    world.add_entity(entities.rock(),Point(x,y,z))
+                    entity_to_add = entities.rock()
+                world.add_entity(entity_to_add,Point(x,y,z))
                 i += 1
     print("created " + str(i) + " walls")

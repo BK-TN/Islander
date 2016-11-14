@@ -51,6 +51,11 @@ def dirt():
         components.Solid(1)
     ])
 
+def grass():
+    return Entity("grass", [
+        components.Drawable('.', (10,150,10), depth = 1),
+    ])
+
 def moveright():
     return Entity("i wanna moveright", [
         components.Drawable('>',(0,255,0)),

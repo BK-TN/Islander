@@ -7,8 +7,8 @@ import time
 
 if __name__ == "__main__":
     # Constants go here
-    screen_width = 1280
-    screen_height = 720
+    screen_width = 640
+    screen_height = 480
 
     # Pygame init and setup
     pygame.init()
@@ -20,13 +20,14 @@ if __name__ == "__main__":
     player = entities.player()
     world = World(player, screen)
 
+    worldgen.generate(world)
+
     world.add_entity(player,Point(0,0,0))
     world.add_entity(entities.rock(),Point(3,0,0))
     world.add_entity(entities.rock(),Point(4,0,0))
     world.add_entity(entities.rock(),Point(4,1,0))
     world.add_entity(entities.moveright(),Point(-10,1,0))
-
-    worldgen.generate(world)
+    world.add_entity(entities.Entity("a meme", []), Point(0,5,0))
 
     drawer = systems.DrawingSystem(screen, player)
 
@@ -39,7 +40,7 @@ if __name__ == "__main__":
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
-                    
+
                 now = time.time()
 
                 # Player movement

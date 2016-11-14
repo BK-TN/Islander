@@ -17,19 +17,37 @@ class DrawingSystem:
     def check_entity(self, entity):
         pass
     def process(self, world):
+        def draw(drawable, draw_background):
+            # Find the tile to use based on the ASCII value of the char to draw
+            src_x = ord(drawable.char) % 16
+            src_y = math.floor(ord(drawable.char) / 16)
+            # Create the rect this tile should be drawn in
+            rect = pygame.Rect(
+            (screentiles_x / 2 - self.camera_pos.x + x) * self.tilew,
+            (screentiles_y / 2 - self.camera_pos.y + y) * self.tileh,
+            self.tilew,
+            self.tileh)
+            # Set the tile color by changing the tileset's palette (Which is really fast)
+            self.tileset.set_palette_at(1,drawable.color)
+            if draw_background:
+                pygame.draw.rect(self.screen, drawable.bgcolor, rect)
+            # Draw tile
+            self.screen.blit(
+            self.tileset,
+            (rect.x,rect.y),
+            pygame.Rect(src_x * self.tilew, src_y * self.tileh, self.tilew, self.tileh)
+            )
+
         if self.camera_target != None:
             pos = world.find_pos(self.camera_target)
             self.camera_pos = pos
 
         self.screen.fill((0,0,0))
 
-        tw = self.tilew
-        th = self.tileh
-
         # Find the max amount of tiles that fit the with and height of the screen
         # So we can calculate the center of it
-        screentiles_x = self.screen.get_width() / tw
-        screentiles_y = self.screen.get_height() / th
+        screentiles_x = self.screen.get_width() / self.tilew
+        screentiles_y = self.screen.get_height() / self.tileh
 
         # Calculate 'borders' to draw within
         left = math.floor(self.camera_pos.x - screentiles_x/2)
@@ -39,34 +57,17 @@ class DrawingSystem:
 
         for x in range(left,right):
             for y in range(top,bottom):
-                # print(str(x) + " - " + str(y))
                 #gridslice = sorted(world.search_slice(x,y),key=lambda e: world.find_pos(e).z)
-                gridslice = world.search_slice(x,y,self.camera_pos.z,2)
-                if len(gridslice) > 0:
-                    e = gridslice[0]
-                    drawable = e.get(components.Drawable)
-                    if drawable != None:
-                        # Find the tile to use based on the ASCII value of the char to draw
-                        src_x = ord(drawable.char) % 16
-                        src_y = math.floor(ord(drawable.char) / 16)
+                drawn = False
+                for z in range(self.camera_pos.z,10):
+                    if drawn: break
+                    entities_on_pos = world.check_spot(Point(x,y,z))
+                    drawables = list(d for d in (e.get(components.Drawable) for e in entities_on_pos) if d != None)
+                    if len(drawables) > 0:
+                        drawables = sorted(drawables, key=lambda d: d.depth)
+                        draw(drawables[0], z == self.camera_pos.z)
+                        drawn = True
 
-                        rect = pygame.Rect(
-                        screentiles_x * tw / 2 - self.camera_pos.x * tw + x * tw,
-                        screentiles_y * th / 2 - self.camera_pos.y * th + y * th,
-                        tw,
-                        th)
-
-                        self.tileset.set_palette_at(1,drawable.color)
-
-                        if world.find_pos(e).z == self.camera_pos.z:
-                            # Draw background color
-                            pygame.draw.rect(self.screen, drawable.bgcolor, rect)
-                        # Draw tile
-                        self.screen.blit(
-                        self.tileset,
-                        (rect.x,rect.y),
-                        pygame.Rect(src_x * tw, src_y * th, tw, th)
-                        )
         pygame.display.flip()
 
 class MovementSystem:

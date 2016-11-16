@@ -51,9 +51,14 @@ def dirt():
         components.Solid(1)
     ])
 
+def water():
+    return Entity("water", [
+        components.Drawable("~", (32,64,255))
+    ])
+
 def grass():
     return Entity("grass", [
-        components.Drawable('.', (10,150,10), depth = 1),
+        components.Drawable('.', (10,150,10), bgcolor = (16,32,16), depth = 1),
     ])
 
 def moveright():

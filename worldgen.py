@@ -1,15 +1,42 @@
 import entities
+import random
+import math
 from point import Point
+
+def generate_heightmap(size):
+    hmap = [[10 for x in range(-size,size)] for y in range(-size,size)]
+
+    for i in range(16):
+        radius = random.randint(8, int(size / 2))
+        xpos = random.randint(-size + radius, size - radius)
+        ypos = random.randint(-size + radius, size - radius)
+
+        for x in range(xpos - radius, xpos + radius):
+            for y in range(ypos - radius, ypos + radius):
+                dx = (xpos - x) ** 2
+                dy = (ypos - y) ** 2
+                disttocenter = math.sqrt(dx+dy)
+                if x > -size and x < size and y > -size and y < size and disttocenter < radius:
+                    hmap[x][y] = 0
+    return hmap
+
 
 def generate(world):
     i = 0
     size = 50
-    for z in range(0,10):
-        for x in range(-size,size):
-            for y in range(-size,size):
-                if z == 0:
+    random.seed()
+
+    hmap = generate_heightmap(size)
+
+    for x in range(-size,size):
+        for y in range(-size,size):
+            for z in range(0,5):
+                h = hmap[x][y]
+                if z < h:
+                    entity_to_add = entities.water()
+                elif z == h:
                     entity_to_add = entities.grass()
-                elif z == 1:
+                elif z == h+1:
                     entity_to_add = entities.dirt()
                 else:
                     entity_to_add = entities.rock()

@@ -16,8 +16,10 @@ def generate_heightmap(size):
                 dx = (xpos - x) ** 2
                 dy = (ypos - y) ** 2
                 disttocenter = math.sqrt(dx+dy)
-                if x > -size and x < size and y > -size and y < size and disttocenter < radius:
-                    hmap[x][y] = 0
+                if x > -size and x < size and y > -size and y < size:
+                    depth = -int(1 - (disttocenter / radius) * 3)
+                    if depth < 1:
+                        hmap[x][y] = depth
     return hmap
 
 

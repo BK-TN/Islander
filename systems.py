@@ -62,7 +62,7 @@ class DrawingSystem:
                 for z in range(self.camera_pos.z,10):
                     if drawn: break
                     entities_on_pos = world.check_spot(Point(x,y,z))
-                    drawables = list(d for d in (e.get(components.Drawable) for e in entities_on_pos) if d != None)
+                    drawables = [d for d in (e.get(components.Drawable) for e in entities_on_pos) if d != None]
                     if len(drawables) > 0:
                         drawables = sorted(drawables, key=lambda d: d.depth)
                         draw(drawables[0], z == self.camera_pos.z)

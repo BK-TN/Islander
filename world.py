@@ -13,6 +13,7 @@ class World:
         self.player = player
         self.systems = [
             systems.MovementSystem(),
+            systems.PhysicsSystem(),
             #systems.DrawingSystem(screen, player),
         ]
 
@@ -72,7 +73,7 @@ class World:
         space = 1
         ents = self.check_spot(pos)
         for e in ents:
-            s = e.get(components.Solid)
+            s = e.get(components.Physical)
             if s != None:
                 space -= s.volume
         return space

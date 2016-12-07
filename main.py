@@ -27,7 +27,6 @@ if __name__ == "__main__":
     world.add_entity(entities.rock(),Point(4,0,0))
     world.add_entity(entities.rock(),Point(4,1,0))
     world.add_entity(entities.moveright(),Point(-10,1,0))
-    world.add_entity(entities.Entity("a meme", []), Point(0,5,0))
 
     drawer = systems.DrawingSystem(screen, player)
 
@@ -62,7 +61,8 @@ if __name__ == "__main__":
                 if event.key == pygame.K_KP9: # North east
                     world.player.give_action(actions.MoveAction(pt.x+1,pt.y-1))
                 if event.key == pygame.K_KP5: # Wait
-                    world.wait(2)
+                    pass
+                    #world.wait(2)
 
                 # Step until player is ready
 

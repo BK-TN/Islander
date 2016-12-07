@@ -9,9 +9,13 @@ class Character:
     def __init__(self):
         self.ready = True
 
-class Solid:
-    def __init__(self, volume):
+# Component for objects that are physical (Pretty much every non-gas object)
+# Volume is measured in m3
+# Weight is measured in kg
+class Physical:
+    def __init__(self, volume, weight):
         self.volume = volume
+        self.weight = weight
 
 class MoveRight:
     pass

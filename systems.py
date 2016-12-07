@@ -80,10 +80,10 @@ class MovementSystem:
         def try_move(world, entity, pos):
             can_move = True
 
-            solid_comp = entity.get(components.Solid)
-            if solid_comp != None:
+            physical_comp = entity.get(components.Physical)
+            if physical_comp != None:
                 space_left = world.get_spot_space(pos)
-                if space_left < solid_comp.volume:
+                if space_left < physical_comp.volume:
                     can_move = False
 
             if can_move:
@@ -100,3 +100,18 @@ class MovementSystem:
             if moveright != None:
                 pos = world.find_pos(e)
                 try_move(world, e, Point(pos.x + 1, pos.y, pos.z))
+
+class PhysicsSystem:
+    def __init__(self):
+        self.entities = []
+    def check_entity(self, entity):
+        if entity.has(components.Physical):
+            self.entities.append(entity)
+    def process(self, world):
+        for e in self.entities:
+            phys = e.get(components.Physical)
+            pos = world.find_pos(e)
+            pos_below = Point(pos.x,pos.y,pos.z+1)
+            space_below = world.get_spot_space(pos_below)
+            if space_below < phys.volume:
+                world.move_entity(e,pos_below)

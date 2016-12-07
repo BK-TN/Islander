@@ -36,19 +36,19 @@ def player():
     return Entity("John McJohn", [
         components.Drawable('@',(255,255,255)),
         components.Character(),
-        components.Solid(0.25)
+        components.Physical(0.25, 80)
     ])
 
 def rock():
     return Entity("rock", [
         components.Drawable('#', (128,128,128), bgcolor = (96,96,96)),
-        components.Solid(1)
+        components.Physical(1, 2500)
     ])
 
 def dirt():
     return Entity("dirt", [
         components.Drawable('~', (165,42,42), bgcolor = (64,16,16)),
-        components.Solid(1)
+        components.Physical(1, 1500)
     ])
 
 def water():
@@ -65,5 +65,5 @@ def moveright():
     return Entity("i wanna moveright", [
         components.Drawable('>',(0,255,0)),
         components.MoveRight(),
-        components.Solid(0.25)
+        components.Physical(0.25, 50)
     ])
